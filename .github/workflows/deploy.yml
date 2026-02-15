@@ -20,12 +20,12 @@ jobs:
 
       - name: Build and push frontend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest -f ./Dockerfile ./frontend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest -f ./Dockerfile .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest
 
       - name: Build and push backend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest -f ./Dockerfile ./backend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest -f ./Dockerfile .
           docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest
 
   deploy:
