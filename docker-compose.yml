@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  frontend:
+    image: ${DOCKERHUB_USERNAME}/soundstorm-frontend:latest
+    container_name: soundstorm-frontend
+    restart: always
+    ports:
+      - "8080:8080"
+
+  backend:
+    image: ${DOCKERHUB_USERNAME}/soundstorm-backend:latest
+    container_name: soundstorm-backend
+    restart: always
+    ports:
+      - "8081:8081"
