@@ -38,9 +38,10 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
+          envs: DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           script: |
             cd /home/${{ secrets.SERVER_USER }}/test-front-deploy
             ls -l
             docker compose -f docker-compose.yml pull
-            docker compose -f docker-compose.yml down
-            docker compose -f docker-compose.yml up -d
+            docker compose -f docker-compose.yml down --remove-orphans
+            docker compose -f docker-compose.yml up -d --build
