@@ -1,14 +1,18 @@
-# Використовуємо Node.js для бекенду
-FROM node:18-alpine
-
+# Stage 1: build React app
+FROM node:18-alpine AS builder
 WORKDIR /app
 
-# Копіюємо залежності
 COPY package*.json ./
-RUN npm install --production
+RUN npm install
 
-# Копіюємо код
 COPY . .
+RUN npm run build
 
-# Запускаємо сервер
-CMD ["node", "server.js"]
+# Stage 2: serve with nginx
+FROM nginx:alpine
+
+# Копіюємо свій nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+
+# Копіюємо білд у Nginx
+COPY --from=builder /app/build /usr/share/nginx/html
