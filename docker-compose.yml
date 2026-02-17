@@ -6,7 +6,7 @@ services:
     container_name: soundstorm-frontend
     restart: always
     ports:
-      - "8080:8080"
+      - "8082:8080"
 
   backend:
     image: ${DOCKERHUB_USERNAME}/soundstorm-backend:latest
