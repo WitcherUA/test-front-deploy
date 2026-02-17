@@ -20,13 +20,13 @@ jobs:
 
       - name: Build and push backend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend ./backend
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest ./backend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest
 
       - name: Build and push frontend
         run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend ./frontend
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend
+          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest ./frontend
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest
 
   deploy:
     runs-on: ubuntu-latest
@@ -41,5 +41,6 @@ jobs:
           port: ${{ secrets.SERVER_PORT }}
           script: |
             cd /home/${{ secrets.SERVER_USER }}/soundstorm
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             docker-compose pull
             docker-compose up -d
