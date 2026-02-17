@@ -1,4 +1,4 @@
-# Stage 1: збірка фронтенду
+# Stage 1: build React app
 FROM node:18-alpine AS builder
 WORKDIR /app
 
@@ -8,7 +8,7 @@ RUN npm install
 COPY . .
 RUN npm run build
 
-# Stage 2: запуск через Nginx
+# Stage 2: serve with nginx
 FROM nginx:alpine
 
 # Копіюємо свій nginx.conf
