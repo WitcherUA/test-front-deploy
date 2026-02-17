@@ -38,10 +38,12 @@ jobs:
           host: ${{ secrets.SERVER_IP }}
           username: ${{ secrets.SERVER_USER }}
           key: ${{ secrets.SERVER_KEY }}
-          envs: DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
           script: |
+            export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             cd /home/${{ secrets.SERVER_USER }}/test-front-deploy
             echo "DOCKERHUB_USERNAME=$DOCKERHUB_USERNAME"
             docker compose -f docker-compose.yml pull
             docker compose -f docker-compose.yml down --remove-orphans
             docker compose -f docker-compose.yml up -d --build
+
+            
