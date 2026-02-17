@@ -1,4 +1,4 @@
-name: CI/CD Deploy
+name: Deploy Soundstorm
 
 on:
   push:
@@ -6,38 +6,20 @@ on:
       - main
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push frontend
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest -f ./Dockerfile .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-frontend:latest
-
-      - name: Build and push backend
-        run: |
-          docker build -t ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest -f ./Dockerfile .
-          docker push ${{ secrets.DOCKERHUB_USERNAME }}/soundstorm-backend:latest
-
   deploy:
     runs-on: ubuntu-latest
-    needs: build
+
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Deploy via SSH
         uses: appleboy/ssh-action@v0.1.7
         with:
-          host: ${{ secrets.SERVER_IP }}
+          host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USER }}
-          key: ${{ secrets.SERVER_KEY }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
           script: |
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
             cd /home/${{ secrets.SERVER_USER }}/test-front-deploy
@@ -45,5 +27,3 @@ jobs:
             docker compose -f docker-compose.yml pull
             docker compose -f docker-compose.yml down --remove-orphans
             docker compose -f docker-compose.yml up -d --build
-
-            
