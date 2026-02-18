@@ -21,9 +21,8 @@ services:
       volumes:
         - ./nginx/conf:/etc/nginx/conf.d
         - ./certbot/www:/var/www/certbot
-        - ./certbot/conf/live/soundstorm.pp.ua/fullchain.pem:/etc/letsencrypt/live/soundstorm.pp.ua/fullchain.pem:ro
-        - ./certbot/conf/live/soundstorm.pp.ua/privkey.pem:/etc/letsencrypt/live/soundstorm.pp.ua/privkey.pem:ro
-        ports: 
+        - /etc/letsencrypt:/etc/letsencrypt:ro
+      ports: 
         - "80:80" 
         - "443:443"
       networks:
