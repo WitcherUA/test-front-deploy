@@ -17,9 +17,10 @@ CMD ["npm", "start"]
 # Final image for frontend
 FROM nginx:alpine AS frontend
 COPY --from=frontend-build /frontend/build /usr/share/nginx/html
-EXPOSE 8080
+EXPOSE 80
+EXPOSE 443
 CMD ["nginx", "-g", "daemon off;"]
 
 # Final image for backend
 FROM backend-build AS backend
-EXPOSE 8081
+EXPOSE 5000
