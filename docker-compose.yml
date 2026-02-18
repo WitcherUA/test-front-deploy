@@ -13,7 +13,7 @@ services:
       - soundstorm
 
   frontend:
-      image: maxnrg09/soundstorm-frontend:latest
+      image: ${DOCKERHUB_USERNAME}/soundstorm-frontend:latest
       container_name: frontend
       restart: always
       depends_on:
