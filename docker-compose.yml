@@ -7,23 +7,44 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
+      - MONGO_URI=mongodb://mongo:27017/soundstorm   # підключення до MongoDB
     ports:
       - "5000:5000"
     networks:
       - soundstorm
+    depends_on:
+      - mongo
 
   frontend:
-      image: ${DOCKERHUB_USERNAME}/soundstorm-frontend:latest
-      container_name: frontend
-      restart: always
-      depends_on:
-        - backend
-      volumes:
-        - ./nginx/conf:/etc/nginx/conf.d
-        - ./certbot/www:/var/www/certbot
-        - ./certbot/conf:/etc/letsencrypt:ro
-      ports: 
-        - "80:80" 
-        - "443:443"
-      networks:
-        - soundstorm
+    image: ${DOCKERHUB_USERNAME}/soundstorm-frontend:latest
+    container_name: frontend
+    restart: always
+    depends_on:
+      - backend
+    volumes:
+      - ./nginx/conf:/etc/nginx/conf.d
+      - ./certbot/www:/var/www/certbot
+      - ./certbot/conf:/etc/letsencrypt:ro
+    ports: 
+      - "80:80" 
+      - "443:443"
+    networks:
+      - soundstorm
+
+  mongo:
+    image: mongo:6.0
+    container_name: mongo
+    restart: always
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - soundstorm
+
+volumes:
+  mongo_data:
+
+networks:
+  soundstorm:
+    driver: bridge
