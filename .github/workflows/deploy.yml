@@ -52,10 +52,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: deploy
     steps:
+      - name: Prepare reports dir
+        run: mkdir -p reports
       - name: Run Nikto in Docker
         run: |
           docker run --rm \
-            -v $(pwd):/reports \
+            -v $(pwd)/reports:/reports \
             ghcr.io/sullo/nikto:latest \
             -h https://soundstorm.pp.ua \
             -Format html \
@@ -64,19 +66,21 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nikto-report
-          path: nikto_report.html
+          path: reports/nikto_report.html
 
   wapiti-scan:
     name: Wapiti Scan
     runs-on: ubuntu-latest
     needs: deploy
     steps:
+      - name: Prepare reports dir
+        run: mkdir -p reports
       - name: Run Wapiti in Docker
         run: |
-          docker run --rm -v $(pwd):/reports python:3.11-slim \
+          docker run --rm -v $(pwd)/reports:/reports python:3.11-slim \
             bash -c "pip install wapiti3 && wapiti -u https://soundstorm.pp.ua -o /reports/wapiti_report -f html"
       - name: Upload Wapiti Report
         uses: actions/upload-artifact@v4
         with:
           name: wapiti-report
-          path: wapiti_report
+          path: reports/wapiti_report
