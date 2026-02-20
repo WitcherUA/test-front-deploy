@@ -55,7 +55,7 @@ jobs:
       - name: Install Nikto
         run: sudo apt-get update && sudo apt-get install -y nikto
       - name: Run Nikto Scan
-        run: nikto -h https://test.soundstorm.pp.ua -output nikto_report.txt
+        run: nikto -h https://soundstorm.pp.ua -output nikto_report.txt
       - name: Upload Nikto Report
         uses: actions/upload-artifact@v4
         with:
@@ -70,7 +70,7 @@ jobs:
       - name: Install Wapiti
         run: pip install wapiti3
       - name: Run Wapiti Scan
-        run: wapiti -u https://test.soundstorm.pp.ua -o wapiti_report
+        run: wapiti -u https://soundstorm.pp.ua -o wapiti_report
       - name: Upload Wapiti Report
         uses: actions/upload-artifact@v4
         with:
