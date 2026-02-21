@@ -62,7 +62,7 @@ jobs:
           docker run --rm \
           -v $(pwd)/reports:/reports \
           ghcr.io/sullo/nikto:latest \ 
-          -h https://soundstorm.pp.ua \
+          -host https://soundstorm.pp.ua \
           -Format html \
           -output /reports/nikto_report.html
       - name: Upload Nikto Report
