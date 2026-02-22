@@ -63,7 +63,7 @@ jobs:
         docker run --rm \
           -v $(pwd)/reports:/reports \
           ghcr.io/sullo/nikto:latest \
-          -host soundstorm.pp.ua \
+          -url https://soundstorm.pp.ua \
           -Format htm \
           -output /reports/nikto_report.html
 
@@ -72,6 +72,7 @@ jobs:
       with:
         name: nikto-report
         path: reports/nikto_report.html
+
 
   wapiti-scan:
     name: Wapiti Scan
