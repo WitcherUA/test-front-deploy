@@ -5,11 +5,16 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Controllers + JSON camelCase
 builder.Services.AddControllers()
-    .AddJsonOptions(opts => opts.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddOpenApi();
+    .AddJsonOptions(opts =>
+        opts.JsonSerializerOptions.PropertyNamingPolicy = System.Text.Json.JsonNamingPolicy.CamelCase);
 
+// Swagger / OpenAPI for .NET 8
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// JWT Authentication
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -21,8 +26,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)
+            )
         };
+
         options.Events = new JwtBearerEvents
         {
             OnChallenge = async context =>
@@ -35,21 +43,28 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
+// CORS
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowReactApp", policy =>
     {
         policy.SetIsOriginAllowed(origin =>
-              {
-                  if (string.IsNullOrEmpty(origin)) return false;
-                  try { return new Uri(origin).Host.Equals("localhost", StringComparison.OrdinalIgnoreCase); }
-                  catch { return false; }
-              })
-              .AllowAnyHeader()
-              .AllowAnyMethod();
+        {
+            if (string.IsNullOrEmpty(origin)) return false;
+            try
+            {
+                var host = new Uri(origin).Host;
+                return host.Equals("localhost", StringComparison.OrdinalIgnoreCase)
+                    || host.Equals("soundstorm.pp.ua", StringComparison.OrdinalIgnoreCase);
+            }
+            catch { return false; }
+        })
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
+// Dependency Injection
 builder.Services.AddSingleton<MongoDbContext>();
 builder.Services.AddSingleton<IMusicService, MusicService>();
 builder.Services.AddSingleton<IAuthService, AuthService>();
@@ -62,6 +77,7 @@ builder.Services.AddSingleton<ISupportService, SupportService>();
 
 var app = builder.Build();
 
+// Global exception handler
 app.UseExceptionHandler(exceptionHandlerApp =>
 {
     exceptionHandlerApp.Run(async context =>
@@ -72,16 +88,25 @@ app.UseExceptionHandler(exceptionHandlerApp =>
     });
 });
 
+// CORS
 app.UseCors("AllowReactApp");
 
+// Swagger only in Development
 if (app.Environment.IsDevelopment())
 {
-    app.MapOpenApi();
+    app.UseSwagger();
+    app.UseSwaggerUI();
 }
+
+// HTTPS redirection only in Production
 if (!app.Environment.IsDevelopment())
+{
     app.UseHttpsRedirection();
+}
+
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
 app.Run();
