@@ -66,6 +66,7 @@ jobs:
           -url https://soundstorm.pp.ua \
           -Format htm \
           -output /reports/nikto_report.html
+          -maxtime 5m
 
     - name: Upload Nikto Report
       uses: actions/upload-artifact@v4
