@@ -1,18 +1,20 @@
-# Stage 1: build React app
-FROM node:18-alpine AS builder
+# Використовуємо Node.js
+FROM node:18-alpine
+
+# Робоча директорія
 WORKDIR /app
 
+# Копіюємо package.json та package-lock.json
 COPY package*.json ./
-RUN npm install
 
+# Встановлюємо залежності
+RUN npm install --production
+
+# Копіюємо весь код бекенду
 COPY . .
-RUN npm run build
 
-# Stage 2: serve with nginx
-FROM nginx:alpine
+# Відкриваємо порт 5000
+EXPOSE 5000
 
-# Копіюємо свій nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Копіюємо білд у Nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+# Запускаємо бекенд
+CMD ["npm", "start"]
