@@ -10,7 +10,7 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - soundstorm
+      - soundstorm_default
     depends_on:
       - mongo
 
@@ -28,7 +28,7 @@ services:
       - "80:80" 
       - "443:443"
     networks:
-      - soundstorm
+      - soundstorm_default
 
   mongo:
     image: mongo:6.0
@@ -38,11 +38,11 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - soundstorm
+      - soundstorm_default
 
 volumes:
   mongo_data:
 
 networks:
-  soundstorm:
-    driver: bridge
+  soundstorm_default
+    external: true
