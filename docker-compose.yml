@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   backend:
-    image: ${DOCKERHUB_USERNAME}/soundstorm-backend:latest
+    image: witcherua/soundstorm-backend:latest
     restart: always
     environment:
       - NODE_ENV=production
@@ -15,7 +15,7 @@ services:
       - mongo
 
   frontend:
-    image: ${DOCKERHUB_USERNAME}/soundstorm-frontend:latest
+    image: witcherua/soundstorm-frontend:latest
     restart: always
     depends_on:
       - backend
