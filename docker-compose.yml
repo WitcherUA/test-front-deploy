@@ -23,7 +23,6 @@ services:
       - backend
     volumes:
       - ./html:/usr/share/nginx/html
-      - ./static:/usr/share/nginx/html/static
       - ./nginx/conf:/etc/nginx/conf.d
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt:ro
