@@ -44,5 +44,5 @@ volumes:
   mongo_data:
 
 networks:
-  soundstorm_default
+  soundstorm_default:
     external: true
