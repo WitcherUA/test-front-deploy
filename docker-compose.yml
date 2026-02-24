@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       - NODE_ENV=production
-      - MONGO_URI=mongodb://mongo:27017/soundstorm   # підключення до MongoDB
+      - MONGO_URI=mongodb://mongo:27017/soundstorm
     ports:
       - "5000:5000"
     networks:
@@ -22,9 +22,12 @@ services:
     depends_on:
       - backend
     volumes:
+      - ./html:/usr/share/nginx/html
+      - ./static:/usr/share/nginx/html/static
       - ./nginx/conf:/etc/nginx/conf.d
       - ./certbot/www:/var/www/certbot
       - ./certbot/conf:/etc/letsencrypt:ro
+
     ports: 
       - "80:80" 
       - "443:443"

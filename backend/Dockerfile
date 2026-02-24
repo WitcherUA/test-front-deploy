@@ -1,18 +1,26 @@
-# Stage 1: build React app
-FROM node:18-alpine AS builder
+# Stage 1: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
+WORKDIR /src
+
+# Копіюємо csproj і відновлюємо залежності
+COPY backend/MusicStreamingApi/*.csproj ./MusicStreamingApi/
+RUN dotnet restore ./MusicStreamingApi/MusicStreamingApi.csproj
+
+# Копіюємо решту коду
+COPY backend/MusicStreamingApi ./MusicStreamingApi
+WORKDIR /src/MusicStreamingApi
+
+# Публікуємо проект у Release
+RUN dotnet publish -c Release -o /app/publish
+
+# Stage 2: Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+COPY --from=build /app/publish .
 
-COPY . .
-RUN npm run build
+# Примусово запускаємо API на порту 5000
+ENV ASPNETCORE_URLS=http://+:5000
+EXPOSE 5000
 
-# Stage 2: serve with nginx
-FROM nginx:alpine
-
-# Копіюємо свій nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Копіюємо білд у Nginx
-COPY --from=builder /app/build /usr/share/nginx/html
+ENTRYPOINT ["dotnet", "MusicStreamingApi.dll"]

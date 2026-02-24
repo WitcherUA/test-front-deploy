@@ -11,8 +11,12 @@
     <PackageReference Include="MongoDB.Driver" Version="3.0.0" />
     <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="8.2.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.0" />
+<<<<<<< HEAD
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="10.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.0" />
+=======
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
+>>>>>>> 05b66ff691e5fb6a63f3e610b9bcc515d85e4d52
   </ItemGroup>
 
 </Project>
