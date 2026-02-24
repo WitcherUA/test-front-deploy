@@ -45,4 +45,3 @@ volumes:
 
 networks:
   soundstorm_default:
-    external: true
