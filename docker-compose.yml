@@ -20,10 +20,10 @@ services:
     depends_on:
       - backend
     volumes:
-      - /home/maxnrg09/test-front-deploy/html:/usr/share/nginx/html
-      - ./nginx/conf:/etc/nginx/conf.d
-      - ./certbot/www:/var/www/certbot
-      - ./certbot/conf:/etc/letsencrypt:ro
+      - /home/maxnrg09/test-front-deploy/html:/usr/share/nginx/html 
+      - ./nginx/conf:/etc/nginx/conf.d 
+      - /home/maxnrg09/certbot/www:/var/www/certbot 
+      - /home/maxnrg09/certbot:/etc/letsencrypt:ro
     ports: 
       - "80:80" 
       - "443:443"
