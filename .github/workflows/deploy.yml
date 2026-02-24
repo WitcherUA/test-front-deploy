@@ -42,10 +42,11 @@ jobs:
           script: |
             cd /home/${{ secrets.SERVER_USER }}/soundstorm
             export DOCKERHUB_USERNAME=${{ secrets.DOCKERHUB_USERNAME }}
-            docker rm -f soundstorm-frontend soundstorm-backend || true
-            docker-compose down
+            docker rm -f backend frontend mongo certbot || true
+            docker-compose down --remove-orphans
             docker-compose pull
             docker-compose up -d
+
 
   wapiti-scan:
     name: Wapiti Scan
