@@ -10,7 +10,7 @@ services:
     ports:
       - "5000:5000"
     networks:
-      - soundstorm_default
+      - test-soundstorm-deploy_default
     depends_on:
       - mongo
 
@@ -28,7 +28,7 @@ services:
       - "80:80" 
       - "443:443"
     networks:
-      - soundstorm_default
+      - test-soundstorm-deploy_default
 
   mongo:
     image: mongo:6.0
@@ -38,10 +38,41 @@ services:
     ports:
       - "27017:27017"
     networks:
-      - soundstorm_default
+      - test-soundstorm-deploy_default
+
+  # --- Monitoring stack ---
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: always
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    networks:
+      - test-soundstorm-deploy_default
+
+  node_exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    restart: always
+    ports:
+      - "9100:9100"
+    networks:
+      - test-soundstorm-deploy_default
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    networks:
+      - test-soundstorm-deploy_default
 
 volumes:
   mongo_data:
 
 networks:
-  soundstorm_default:
+  test-soundstorm-deploy_default:
+    external: true

@@ -31,3 +31,4 @@ Thumbs.db
 
 # Nginx configs (якщо не хочеш трекати локальні)
 nginx/
+certbot/conf/live/
