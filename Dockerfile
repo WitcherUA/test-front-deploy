@@ -2,7 +2,10 @@
 FROM node:18-alpine AS frontend-build
 WORKDIR /frontend
 COPY frontend/package*.json ./
-RUN npm install
+RUN npm install -g npm@latest \ 
+&& npm config set registry https://registry.npmjs.org/ \ 
+&& npm cache clean --force \ 
+&& npm install
 COPY frontend .
 RUN npm run build
 
